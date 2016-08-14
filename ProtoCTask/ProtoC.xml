@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ProjectSchemaDefinitions xmlns="clr-namespace:Microsoft.Build.Framework.XamlTypes;assembly=Microsoft.Build.Framework" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:transformCallback="Microsoft.Cpp.Dev10.ConvertPropertyCallback">
+  <Rule Name="ProtoC" PageTemplate="tool" DisplayName="ProtoC" Order="150">
+    <Rule.DataSource>
+      <DataSource Persistence="ProjectFile" ItemType="Protobuf" HasConfigurationCondition="true" />
+    </Rule.DataSource>
+    <Rule.Categories>
+      <Category Name="General" DisplayName="General"/>
+    </Rule.Categories>
+  </Rule>
+
+  <ItemType Name="Protobuf" DisplayName="Protocol Buffer Descriptor"/>
+  <ContentType Name="Protobuf" DisplayName="Protocol Buffer Descriptor" ItemType="Protobuf"/>
+  <FileExtension Name=".proto" ContentType="Protobuf"/>
+</ProjectSchemaDefinitions>

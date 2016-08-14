@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)ProtoC.xml" />
+    <AvailableItemName Include="Protobuf">
+      <Targets>GenerateProtobufSources</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+
+  <UsingTask AssemblyFile="$(MSBuildThisFileDirectory)bin\ProtoCTask.dll" TaskName="ProtoC" />
+
+  <PropertyGroup>
+    <!-- Generate ProtoC sources after other MSBuild generated sources. -->
+    <AfterBuildGenerateSourcesTargets>
+      $(AfterBuildGenerateSourcesTargets);
+      GenerateProtobufSources
+    </AfterBuildGenerateSourcesTargets>
+    <!-- Include ProtoC sources in computed Cl inputs. -->
+    <ComputeCompileInputsTargets>
+      $(ComputeCompileInputsTargets);
+      ComputeProtobufClCompileInputs
+    </ComputeCompileInputsTargets>
+  </PropertyGroup>
+
+  <Target Name="GenerateProtobufSources">
+    <ProtoC Condition="'@(Protobuf)' != ''"
+        Include="@(Protobuf)"
+        ProtoCPath="$(ProtoCPath)"
+        IntermediateOutputPath="$(IntermediateOutputPath)\ProtoC"
+        TrackerLogLocation="$(TLogLocation)">
+      <Output TaskParameter="Outputs" ItemName="ProtoCOutputs" />
+    </ProtoC>
+  </Target>
+
+  <Target Name="ComputeProtobufClCompileInputs" DependsOnTargets="GenerateProtobufSources">
+    <ItemGroup>
+      <ClCompile Include="@(ProtoCOutputs)" />
+      <ClCompile Condition="'@(ProtoCOutputs)' != ''">
+        <AdditionalIncludeDirectories>%(ClCompile.AdditionalIncludeDirectories);$(IntermediateOutputPath)\ProtoC</AdditionalIncludeDirectories>
+      </ClCompile>
+    </ItemGroup>
+  </Target>
+</Project>
